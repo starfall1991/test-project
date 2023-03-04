@@ -18,12 +18,10 @@ class UserService extends BaseCrudService implements UserServiceContract
 
     public function create(UserDto $userDto): User|Model|array
     {
-        return $this->repository->create(
-            dd([
-                'email'    => $userDto->getEmail(),
-                'password' => Hash::make($userDto->getPassword()),
-            ])
-        );
+        return $this->repository->create([
+            'email'    => $userDto->getEmail(),
+            'password' => Hash::make($userDto->getPassword()),
+        ]);
     }
 
     public function update(int $modelId, UserDto $userDto): bool

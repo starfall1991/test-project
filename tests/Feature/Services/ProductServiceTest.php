@@ -1,11 +1,9 @@
 <?php
 
-use App\Dtos\CategoryDto;
 use App\Dtos\ProductDto;
 use App\Models\Category;
 use App\Models\Product;
 use App\Repositories\Contracts\ProductRepositoryContract;
-use App\Services\CategoryService;
 use App\Services\Contracts\ProductServiceContract;
 
 beforeEach(function () {
@@ -42,21 +40,21 @@ it('should create a new product', function () {
     $this->assertInstanceOf(expected: Product::class, actual: $result);
 });
 
-it('should update a category', function () {
+it('should update a product', function () {
     $oldLabel = fake()->name;
     $category = Category::factory()->create(['label' => $oldLabel]);
 
-    $newLabel    = fake()->name;
-    $categoryDto = new CategoryDto(label: $newLabel);
-    $this->mockCategoryRepository
+    $newLabel   = fake()->name;
+    $productDto = new ProductDto(label: $newLabel);
+    $this->mockProductRepository
         ->shouldReceive('update')
         ->once()
         ->with($category->id, ['label' => $newLabel])
         ->andReturn(true);
 
-    $categoryService = app(CategoryService::class);
+    $productService = app(ProductServiceContract::class);
 
-    $result = $categoryService->update(modelId: $category->id, categoryDto: $categoryDto);
+    $result = $productService->update(modelId: $category->id, productDto: $productDto);
 
     $this->assertTrue($result);
 });

@@ -3,7 +3,7 @@
 use App\Dtos\CategoryDto;
 use App\Models\Category;
 use App\Repositories\Contracts\CategoryRepositoryContract;
-use App\Services\CategoryService;
+use App\Services\Contracts\CategoryServiceContract;
 
 beforeEach(function () {
     $this->mockCategoryRepository = Mockery::mock(CategoryRepositoryContract::class);
@@ -15,7 +15,7 @@ it('should return a list of categories', function () {
 
     $this->mockCategoryRepository->shouldReceive('get')->once()->andReturn($categories);
 
-    $categoryService = app(CategoryService::class);
+    $categoryService = app(CategoryServiceContract::class);
 
     $result = $categoryService->get();
 
@@ -32,7 +32,7 @@ it('should create a new category', function () {
         ->with(['label' => $label])
         ->andReturn(new Category());
 
-    $categoryService = app(CategoryService::class);
+    $categoryService = app(CategoryServiceContract::class);
 
     $result = $categoryService->create($categoryDto);
 
@@ -51,7 +51,7 @@ it('should update a category', function () {
         ->with($category->id, ['label' => $newLabel])
         ->andReturn(true);
 
-    $categoryService = app(CategoryService::class);
+    $categoryService = app(CategoryServiceContract::class);
 
     $result = $categoryService->update(modelId: $category->id, categoryDto: $categoryDto);
 

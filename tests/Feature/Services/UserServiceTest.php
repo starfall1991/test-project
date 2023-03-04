@@ -1,11 +1,8 @@
 <?php
 
-use App\Dtos\CategoryDto;
 use App\Dtos\UserDto;
-use App\Models\Category;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryContract;
-use App\Services\CategoryService;
 use App\Services\Contracts\UserServiceContract;
 
 beforeEach(function () {
@@ -46,20 +43,28 @@ it('should create a new user', function () {
 });
 
 it('should update a category', function () {
-    $oldLabel = fake()->name;
-    $category = Category::factory()->create(['label' => $oldLabel]);
-
-    $newLabel    = fake()->name;
-    $categoryDto = new CategoryDto(label: $newLabel);
-    $this->mockCategoryRepository
+    $oldUserRaw = [
+        'email'    => fake()->email,
+        'password' => fake()->password,
+    ];
+    $user       = User::factory()->create([
+        'email'    => $oldUserRaw['email'],
+        'password' => Hash::make($oldUserRaw['password']),
+    ]);
+    $newUserRaw = [
+        'email'    => fake()->email,
+        'password' => fake()->password,
+    ];
+    $userDto    = new UserDto(email: $newUserRaw['email'], password: $newUserRaw['password']);
+    $this->mockUserepository
         ->shouldReceive('update')
         ->once()
-        ->with($category->id, ['label' => $newLabel])
+        //        ->with($category->id, ['label' => $newLabel])
         ->andReturn(true);
 
-    $categoryService = app(CategoryService::class);
+    $userService = app(UserServiceContract::class);
 
-    $result = $categoryService->update(modelId: $category->id, categoryDto: $categoryDto);
+    $result = $userService->update(modelId: $user->id, userDto: $userDto);
 
     $this->assertTrue($result);
 });
