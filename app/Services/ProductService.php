@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Repositories\Contracts\ProductRepositoryContract;
 use App\Services\Contracts\ProductServiceContract;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class ProductService extends BaseCrudService implements ProductServiceContract
 {
@@ -30,5 +31,15 @@ class ProductService extends BaseCrudService implements ProductServiceContract
                 'label' => $productDto->getLabel(),
             ],
         );
+    }
+
+    public function getCategories(int $productId): Collection
+    {
+        return $this->repository->getCategories($productId);
+    }
+
+    public function syncCategories(int $productId, array $categoryIds): void
+    {
+        $this->repository->syncCategories($productId, $categoryIds);
     }
 }
